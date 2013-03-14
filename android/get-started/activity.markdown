@@ -3,10 +3,13 @@
 ##响应发送按钮
 
 为了响应按钮的点击事件，为 activity\_main.xml 文件增加 android:onClick 属性  
+
 	<Button
 		...
 		android::onClick="sendMessage" /> 
+
 onClick 的属性值 sendMessage 是当前 activity 的 method 名称，它必须满足以下条件：  
+
 -access label 是 public
 -返回值是 void
 -只有一个参数，类型是 [android.view.View](http://developer.android.com/reference/android/view/View.html)
@@ -14,6 +17,7 @@ onClick 的属性值 sendMessage 是当前 activity 的 method 名称，它必�
 ##创建并启动一个 *Intent*
 
 *Intent* 的 public constructor 有：
+
 	new Intent();
 	Intent(Intent o);
 	Intent(String action);
@@ -22,21 +26,26 @@ onClick 的属性值 sendMessage 是当前 activity 的 method 名称，它必�
 	Intent(String action, Uri uri, Context packageContext, Class<?> cls);
 
 一个 [android.content.Intent](http://developer.android.com/reference/android/content/Intent.html) 提供了组件间的 runtime binding。一般用来启动另外一个 activity。可以通过 *Intent* 的 constructor 来创建一个 *Intent*	 
+
 	Intent intent = new Intent(this, DisplayMessageActivity.class); 
+
 由于 *Activity* 类是 *Context* 类的子类(java.lang.Object -> android.content.Context -> android.content.ContextWrapper -> android.view.contectThemeWrapper -> android.app.Activity)，所以可以用于参数是 *Context* 类的 Method 中  
 
 一个 *Intent* 不但可以用来启动另外一个 *Activity*，也可以用来承载一系列的数据，如：  
+
 	public final static String EXTRA_MESSAGE = "com.example.app.MESSAGE"
 	Intent intent = new Intent(this, DisplayMessageActivity.class);
 	EditTExt editText = (EditTExt)findViewByID(R.id.edit_message);
 	String message = editText.getText().toString();
 	intent.putExtra(EXTRA_MESSAGE, message);
 	startActivity(intent);
+
 一个 *Intent* 可以承载一系列的 Key-Value 数据，叫做 *extras*。putExtra() Method 的第一个参数是 Key，第二个参数是 Value。习惯上，Key 一般用 app 的名称做前缀
 
 ##创建一个 *Activity*
 
 android.app.Activity 的所有子类必须实现 onCreate() Method，系统在创建 *Activity* 的时候会自动调用这个 Method。  
+
 	public class DisplayMessageActivity extends Activity {
 	
 		protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +68,14 @@ android.app.Activity 的所有子类必须实现 onCreate() Method，系统在�
 	}
 
 在这个 *Activity* 中，使用到了 android.view.View 类的 object R.layout.activity_display_message ，需要在资源文件 strings.xml 中为该 *View* 添加标题：  
+
 	<resources>
 		...
 		<string name="title_activity_display_message">My Message</string>
 	</resources>
 
 所有的 *Activity* 必须在 manifest 文件里声明，所以需要把刚刚创建的 *Activity* 添加到 AndroidManifest.xml 中去。  
+
 	<application ...>
 		...
 		<activity
@@ -80,5 +91,6 @@ android.app.Activity 的所有子类必须实现 onCreate() Method，系统在�
 ##接收一个 *Intent*
 
 每个 *Activity* 都是被一个 *Intent*启动的。在被启动的 *Activity* 中可以调用 [getIntent()](http://developer.android.com/reference/android/app/Activity.html#getIntent(\))
+
 	Intent intent = getIntent();
 	String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
