@@ -10,9 +10,9 @@
 
 onClick 的属性值 sendMessage 是当前 activity 的 method 名称，它必须满足以下条件：
 
--access label 是 public  
--返回值是 void  
--只有一个参数，类型是 [android.view.View](http://developer.android.com/reference/android/view/View.html)  
+- access label 是 public  
+- 返回值是 void  
+- 只有一个参数，类型是 [android.view.View](http://developer.android.com/reference/android/view/View.html)  
 
 ##创建并启动一个 android.content.Intent
 

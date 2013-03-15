@@ -8,10 +8,10 @@
 
 系统的 lifecycle 就像一个金字塔，当系统创建 android.app.Activity 时，系统的 lifecycle 一步一步上升；当用户离开 android.app.Activity 的时候，系统的 lifecycle 一步一步下降。系统的 lifecycle 主要有如下阶段：
 
--Resumed/Running: 用户与 android.app.Activity 交互的状态  
--Paused: android.app.Activity 被其他 android.app.Activity 部分遮挡，处于 Puased 状态的 android.app.Activity 不能接收用户的任何输入，也不能继续执行代码  
--Stopped: 用户完全看不到该 android.app.Activity。当处于 Stopped 状态的时候，android.app.Activity 的 instance 以及它的状态信息都会被保存，但是也不能继续执行任何代码  
--Created/Started: 这两种状态只是一种暂时的过渡状态  
+- Resumed/Running: 用户与 android.app.Activity 交互的状态  
+- Paused: android.app.Activity 被其他 android.app.Activity 部分遮挡，处于 Puased 状态的 android.app.Activity 不能接收用户的任何输入，也不能继续执行代码  
+- Stopped: 用户完全看不到该 android.app.Activity。当处于 Stopped 状态的时候，android.app.Activity 的 instance 以及它的状态信息都会被保存，但是也不能继续执行任何代码  
+- Created/Started: 这两种状态只是一种暂时的过渡状态  
 
 ##指定启动 android.app.Activity
 
@@ -38,9 +38,9 @@
 
 当一个系统调用 android.app.Activity.onPase() 时，开发者一般需要做如下工作
 
--停止界面动画等消耗 CPU 的动作  
--保存一些数据  
--释放系统资源，比如 broadcast receivers  
+- 停止界面动画等消耗 CPU 的动作  
+- 保存一些数据  
+- 释放系统资源，比如 broadcast receivers  
 
 ##Resume 一个 android.app.Activity
 
@@ -64,8 +64,8 @@
 
 一个 android.app.Activity 被销毁，可能是由于以下情况：
 
--用户按了 Back 按钮  
--android.app.Activity 自身调用了 android.app.Activity.finish() method  
--系统因为需要释放资源而销毁了该 android.app.Activity  
+- 用户按了 Back 按钮  
+- android.app.Activity 自身调用了 android.app.Activity.finish() method  
+- 系统因为需要释放资源而销毁了该 android.app.Activity  
 
 在前两种情况下，系统会认为这个 android.app.Activity 已经永远消失；在第三种情况下，系统会记住这个 android.app.Activity 曾经存在过，当用户按返回键的时候会重新创建它。

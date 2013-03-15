@@ -21,12 +21,12 @@
 
 Android 设备的屏幕通常有两个属性：尺寸和密度。按照尺寸和密度划分，可以分为四类：
 
--尺寸: small, normal, large, xlarge  
--密度: low(ldpi), medium(mdpi), high(hdpi), extra high(xhdpi)  
+- 尺寸: small, normal, large, xlarge  
+- 密度: low(ldpi), medium(mdpi), high(hdpi), extra high(xhdpi)  
 
 同时，屏幕的放置方式也可以考虑成为屏幕尺寸的一种变种
 
--方向: landscape(land), portrait(port)  
+- 方向: landscape(land), portrait(port)  
 
 ###创建尺寸的 android.R.layout
 
@@ -46,10 +46,10 @@ Android 设备的屏幕通常有两个属性：尺寸和密度。按照尺寸和
 
 为了使程序在不同屏幕上表现一致，开发者需要提供可以伸缩成四种密度(low, medium, high, extra-high density)的 bitmap 资源。为了生成这种图片，需要使用原始的矢量图按照如下倍数生成四种尺寸的图片：
 
--xhdpi: 2.0  
--hdpi: 1.5  
--mdpi: 1.0 (baseline)  
--ldpi: 0.75  
+- xhdpi: 2.0  
+- hdpi: 1.5  
+- mdpi: 1.0 (baseline)  
+- ldpi: 0.75  
 
 生成的图片应该放置在这样的目录里：  
 
