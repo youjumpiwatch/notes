@@ -102,3 +102,45 @@ android 使用 java.io.File class 来进行文件操作。
 		}
 		return file;
 	}
+
+###在外部设备上存储文件
+
+在每次访问外部存储设备的时候，开发者都应该通过 android.os.Environment.getExternalStorageState() 检测外部存储设备的状态，只有当它的返回值是 android.os.Environment.MEDIA\_MOUNTED，才可以读写文件。
+
+android 外部存储设备上可以存储两种文件： 
+
+- public 文件。用户卸载程序的时候，不会被删除
+- private 文件。用户卸载程序的时候，会被删除
+
+如果想要在外部存储设备上保存 public 文件，开发人员需要调用 android.os.Environment.getExternalStoragePublicDirectory() method 来获取一个 java.io.File object，这个 method 有一个参数，可以设置为 android.os.Environment.DIRECTORY\_MUSIC 或 android.os.Environment.DIRECTORY\_PICTURES，可以额外指定要存出的文件的类型，比如音乐或图片，以使系统可以更有逻辑地存放这些文件。
+
+如果想要在外部存储设备上保存 private 文件，则需要调用 android.os.Context.getExternalFilesDir() method。这个 method 同样可以使用参数来指定文件类型，如果所有指定的文件类型都没有对应的现有的目录存储，则需要将参数替换成 null，这样就可以获取 private 的根目录。
+
+###查询可用的存储空间
+
+如果事先知道需要存储的文件的大小，开发者可以先使用 java.io.File.getFreeSpace() 或 java.io.getTotalSpace() methods 查询系统中是否有足够的可用空间，以免产生 java.io.IOException。
+
+需要注意的是，使用系统并不能保证使用 java.io.File.getFreeSpace() method 获取到的大小的空间都是可用的。
+
+###删除文件
+
+删除文件的方式有两种，一种是直接在 java.io.File 上调用 delete() method，另外一种方式是使用 android.content.Context.deleteFile(fileName) method;
+
+当用户卸载程序到时候，系统会自动删除内部存储设备上的文件以及使用 android.content.Context.getExternalFilesDir() method 在外部存储设备上保存的文件。开发者需要定期清理使用 android.content.Context.getCacheDir() method 保存的缓存文件。
+
+##在 SQL 数据库中保存数据
+
+###定义 Schema 和 Contract
+
+Schema 是数据库设计结构的 declaration。contract class 可以用一种较为系统的方式表示 Schema。
+
+contract class 包含了一些常量，包含数据库表的名、数据库表栏的名以及一些 URI。
+
+一个创建 contract class 的好方法是把整个数据库都能用到的常量放置在 class 的顶级，然后在 class 内为每个表创建一个包含这个表的栏名的 inner class。
+
+	public static abstract class FeedEntry implements BaseColumns {
+		public static final String TABLE_NAME = "entry";
+		public static final String COLUMN_ENTRY_ID = "entryid";
+		public static final String COLUMN_NAME_TITLE = "title";
+		...
+	}
