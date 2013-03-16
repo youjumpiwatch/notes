@@ -86,7 +86,7 @@ android.content.Intent filters 会通知系统当前的 android.app.Activity 可
 - 设置 Intent 的 action 为 ACTION\_SEND，如有需要，设置 data 类型
 - 首先获取 android.view.MenuItem
 - 使用 android.view.MenuItem.getActionProvider() 获取 android.widget.ShareActionProvider 的 instance。
-- 使用 android.widget.ShareActionProvider.setShareIntent() 更新 share android.content.Intent
+- 使用 android.widget.ShareActionProvider.setShareIntent() 更新 share android.content.Intent  
 
 	private ShareActionProvider mShareActionProvider;
 
