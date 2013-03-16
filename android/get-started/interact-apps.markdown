@@ -83,6 +83,8 @@ explicit android.content.Intent 使用 class 的名字来启动 android.app.Acti
 - 一个结果代码，可能是 android.app.Activity.RESULT\_OK 或者 android.app.Activity.RESULT\_CANCELED，取决于用户使用了被调用的 android.app.Activity 还是按了取消按钮。
 - 一个携带结果数据的 android.content.Intent
 
+代码：
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PICK_CONTACT_REQUEST) {
 			if (resultCode == RESULT_OK) {
@@ -107,6 +109,8 @@ explicit android.content.Intent 使用 class 的名字来启动 android.app.Acti
 - action，如 ACTION\_SEND，ACTION\_VIEW。可以通过为 <intent-filter> 增加 <action> 元素来指定。
 - data，可以通过为 <intent-filter> 增加 <data> 元素来指定，其属性值可以取 MIME，URI，URI scheme，或者是他们的排列组合。
 - category，通常与用户的操作手势以及被调用的 android.app.Activity 启动位置有关。系统提供了很多种 categories，所有的 implicit android.content.Intent 都被定义为 CATEGORY\_DEFAULT。可以通过为 <intent-filter> 增加 <category> 元素来指定。
+
+内容：
 
 	<activity android:name="ShareActivity">
 		<intent-filter>

@@ -47,8 +47,11 @@ android 的 Support 库是一个 jar 文件，为老设备提供一些新的 API
 
 android.app.Fragment 是模块化的、可以重复利用的 UI 组件，每个 android.app.Fragment 的 instance 必须关联到一个 parent android.app.Activity/android.app.support.v4.FragmentActivity。这可以通过在 layout 的 XML 文件中加以定义实现。如：
 
+文件：
+
 	res/layout-large/news_articles.xml
 
+内容：
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" ...>
 		<fragment android:name="com.example.android.fragments.HeadlinesFragment" ... />
@@ -87,14 +90,18 @@ android.app.FragmentManager 提供了在运行时动态向 android.app.Activity 
 
 下面这个示例，演示了如何在 layout XML 中配置一个 android.app.Fragment 的 container android.widget.FrameLayout，以及如何向该 android.widget.FrameLayout 中增加 android.app.Fragment。
 
+文件：
+
 	res/layout/news_articles.xml
 
+内容：
 
 	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:id="@+id/fragment_container"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
 
+代码：
 
 	import android.os.Bundle;
 	import android.app.Activity;

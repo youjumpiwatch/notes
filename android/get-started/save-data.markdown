@@ -19,6 +19,8 @@ android.content.SharedPreferences 与 android.preference.Preference 不同，后
 - android.content.Context.getSharedPreferences()。如果需要使用多个 android.content.SharedPreferences 文件，那么就应该用这个 method
 - android.app.Activity.getPreferences()，如果只需要使用一个 android.content.SharedPreferences 文件，那么就应该用这个 method。
 
+代码：
+
 	Context context = getActivity();
 	SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
