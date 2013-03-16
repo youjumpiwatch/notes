@@ -138,9 +138,125 @@ contract class 包含了一些常量，包含数据库表的名、数据库表�
 
 一个创建 contract class 的好方法是把整个数据库都能用到的常量放置在 class 的顶级，然后在 class 内为每个表创建一个包含这个表的栏名的 inner class。
 
+当实现 android.provider.BaseColumns 接口时，内部 class 自动继承 \_ID 成员。
+
 	public static abstract class FeedEntry implements BaseColumns {
 		public static final String TABLE_NAME = "entry";
 		public static final String COLUMN_ENTRY_ID = "entryid";
 		public static final String COLUMN_NAME_TITLE = "title";
 		...
 	}
+
+###使用 SQL Helper 创建数据库
+
+首先，定义一些有关 SQL 操作的语句：
+
+	private static final String TEXT_TYPE = " TEXT ";
+	private static final String COMMA_SEP = ",";
+	private statid final String SQL_CREATE_ENTRIES = 
+			" CREATE TABLE " + FeedReaderContract.FeedEntry.TABLE_NAME + " (" +
+			FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
+			FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
+			FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+			...
+			" )";
+	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME_ENTRIES;
+
+android.database.sqlite.SQLiteOpenHelper class 提供了一系列有用的 API。当开发者使用这个 class 的时候，系统会根据资源占用自动调度数据库操作，开发者只需要在后台线程调用 android.database.sqlite.SQLiteOpenHelper.getWritableDatabase() 以及 android.database.SQLiteOpenHelper.getReadableDatabase() methods 完成工作。
+
+	public class FeedReaderDbHelper extends SQLiteOpenHelper {
+		public static final int DATABASE_VERSION = 1;
+		public static final String DATABASE_NAME = "FeedReader.db";
+
+		public FeedReaderDbHelper(Context context) {
+			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		}
+
+		public void onCreate(SQLiteDatabase db) {
+			db.execSQL(SQL_CREATE_ENTRIES);
+		}
+
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL(SQL_DELETE_ENTRIES);
+			onCreate(db);
+		}
+
+		public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			onUpgrade(db, oldVersion, newVersion);
+		}
+	}
+
+如果需要访问数据库，可以通过这样的方式访问：
+
+	FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(getContext());
+
+###向数据库中添加数据
+
+开发者可以将一个 android.context.ContentValues object 传递给 android.sqlite.SQLiteDatabase.insert() method 来向数据库中添加数据。
+
+	SQLiteDatabase db = mDbHelper.getWritableDatabase();
+	ContentValues values = new ContentValues();
+	values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID, id);
+	values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE, title);
+	values.put(FeedReaderContract.FeedEntry.COLUMN_ENTRY_CONTENT, content);
+	long newRowId;
+	newRowId = db.insert(
+			FeedReaderContract.FeedEntry.TABLE_NAME,
+			FeedReaderContract.FeedEntry.COLUMN_NAME_NULLABLE,
+			values);
+
+###丛数据库中读取数据
+
+想从数据库中读取数据，需要使用 android.database.sqlite.SQLiteDatabase.query() method，这个 method 还融合了 android.database.sqlite.SQLiteDatabase.insert() 以及 android.database.sqlite.SQLiteDatabase.update() 两个 methods 的元素，不同的是，android.database.sqlite.SQLiteDatabase.query() method 提供的是获取数据的方法而不是更改数据。这个 method 的返回值是 android.database.Cursor object。
+
+	SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+	String[] projection = {
+			FeedReaderContract.FeedEntry._ID,
+			FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE,
+			FeedReaderContract.FeedEntry.COLUMN_NAME_UPDATED,
+			...
+	};
+
+	String sortOrder = FeedReaderContract.FeedEntry.COLUMN_NAME_UPDATED + " DESC ";
+	
+	Cursor c = db.query(
+		FeedReaderContract.FeedEntry.TABLE_NAME,
+		projection,
+		selection,
+		selectionArgs,
+		null,
+		null,
+		sortOrder
+	);
+
+如果需要读取某一栏的内容，必须先使用 android.database.Cursor object 的 move methods。一般来说，开发者需要先调用 android.database.Cursor.moveToFirst() method 开始。开发人员可以使用 android.database.Cursor.getString() 和 android.database.Cursor.getLong() 等 methods，使用这些方法的时候，必须传递栏的 index，后者可以通过调用 android.database.Cursor.getColumnIndex() 或 getColumnIndexOrThrow() methods 获取：
+
+	cursor.moveToFirst();
+	long itemId = cursor.getLong(
+		cursor.getColumnIndexOrThrow(FeedReaderContract.FeedEntry._ID);
+	);
+
+###从数据库中删除信息
+
+	String selection = FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+	String[] selectionArgs = { String.valueOf(rowId) };
+	db.delete(table_name, selection, selectionArgs);
+
+###更新数据库
+
+当需要更新数据库中的一部分数值时，可以调用 android.database.sqlite.SQLiteDatabase method：
+
+	SQLiteDatabase db = mDbHelper.getReadableDatabase();
+
+	ContentValues values = new ContentValues();
+	values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE, title);
+
+	String selection = FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + " LINKE ? ";
+	String[] selectionArgs = { String.valueOf(rowId) };
+
+	int count = db.update(
+			FeedReaderDbHelper.FeedEntry.TABLE_NAME,
+			values,
+			selection,
+			selectionArgs);
