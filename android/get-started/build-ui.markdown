@@ -169,9 +169,9 @@ android.app.FragmentManager 提供了在运行时动态向 android.app.Activity 
 		mCallback.onArticleSelected(position);
 	}
 
-###落实接口
+###实现接口
 
-为了从 android.app.Fragment 接收事件的 callback 函数，android.app.Activity 必须落实在 android.app.Fragment 中定义的接口。
+为了从 android.app.Fragment 接收事件的 callback 函数，android.app.Activity 必须实现在 android.app.Fragment 中定义的接口。
 
 	public static class MainActivity extends Activity
 			implements HeadlinesFragment.OnHeadlineSelectedListener {
