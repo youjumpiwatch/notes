@@ -18,7 +18,7 @@ onClick 的属性值 sendMessage 是当前 activity 的 method 名称，它必�
 
 android.content.Intent 的 public constructor 有：
 
-	new Intent();
+	Intent();
 	Intent(Intent o);
 	Intent(String action);
 	Intent(String action, Uri uri);
